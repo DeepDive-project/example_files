@@ -7,18 +7,18 @@ library(stringr)
 
 #------ Script settings:
 setwd("your_path_to_example_files") # <- change this to your path to the 'example_files' directory
-bins_scale = "stages" # time bins set to stages, epochs or equal_bins (latter gives 100 equal bins)
-age_method = "random_by_loc" # in each replicate randomize the age of occurrences by locality to reflect their stratigraphic age range
-replicates = 10 
-begin_bins = 259.51
-end_bins = 192.9
-taxonomic_level = "Genus"
+bins_scale <- "stages" # time bins set to stages, epochs or equal_bins
+age_method <- "random_by_loc" # in each replicate randomize the age of occurrences by locality to reflect their stratigraphic age range
+replicates <- 10 
+begin_bins <- 259.51
+end_bins <- 192.9
+taxonomic_level <- "Genus"
 #------
 
 
 source("utilities/data_pipeline_utilities.R")
-input_occs_file <- "marine_analysis/marine_deepdive_data/NC_raw.csv" # raw data
-name <- "marine_analysis/marine_deepdive_data/"
+input_occs_file <- "marine_analysis/NC_raw.csv" # raw data
+name <- "marine_analysis/"
 create_folders(name)
 
 dat <- read.csv(input_occs_file)
@@ -32,7 +32,7 @@ dat <- dat[!duplicated(dat), ]
 dat$Complete_name <- NA
 dat$Species <- NA
 
-# Build low resolution time bins
+# Build time bins
 bins <- time_bins(dat, scale=bins_scale, begin=begin_bins, finish=end_bins, use_q=T,
     geochart="utilities/geochart.xlsx")
 bins_0 <- -c(bins$start, 192.9)
