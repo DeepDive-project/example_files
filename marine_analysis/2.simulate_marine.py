@@ -13,7 +13,7 @@ n_training_simulations = 5  # simulations per CPU (the total should be ~10,000)
 n_test_simulations = 10  # simulations per CPU (the total should be e.g. 100 or 1000)
 training_seed = 1234
 test_seed = 4321
-outname = "marine_sim"
+outname = "marine"
 #------
 
 try:
@@ -175,11 +175,11 @@ if __name__ == "__main__":
         Yt = np.array(labels)
         print(Xt.shape, Yt.shape)
         # save simulations
-        np.save(os.path.join(output_path, outname + "_features" + ".npy"), Xt)
-        np.save(os.path.join(output_path, outname + "_labels" + ".npy"), Yt)
+        np.save(os.path.join(output_path, outname + "_sim_features" + ".npy"), Xt)
+        np.save(os.path.join(output_path, outname + "_sim_labels" + ".npy"), Yt)
 
-        print("Training features saved as: \n", os.path.join(output_path, outname + "_features" + ".npy"))
-        print("Training labels saved as: \n", os.path.join(output_path, outname + "_labels" + ".npy\n"))
+        print("Training features saved as: \n", os.path.join(output_path, outname + "_sim_features" + ".npy"))
+        print("Training labels saved as: \n", os.path.join(output_path, outname + "_sim_labels" + ".npy\n"))
 
     ### TEST DATASETS ###
     if n_test_simulations:
@@ -191,8 +191,8 @@ if __name__ == "__main__":
         Xt = np.array(features)
         Yt = np.array(labels)
         # save simulations
-        np.save(os.path.join(output_path, outname + "test_features" + ".npy"), Xt)
-        np.save(os.path.join(output_path, outname + "test_labels" + ".npy"), Yt)
+        np.save(os.path.join(output_path, outname + "_test_features" + ".npy"), Xt)
+        np.save(os.path.join(output_path, outname + "_test_labels" + ".npy"), Yt)
 
         print("Test features saved as: \n", os.path.join(output_path, outname + "_test_features" + ".npy"))
         print("Test labels saved as: \n", os.path.join(output_path, outname + "_test_labels" + ".npy"))
