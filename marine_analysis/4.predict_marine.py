@@ -131,7 +131,7 @@ if __name__=="__main__":
     lfile = os.path.join(testset_wd, label_file)
     f = np.load(ffile)
     l = np.load(lfile)
-    
+
     res = list()
     for i in model_list:
         filename = i.split(sep="rnn_model")[1]
@@ -139,21 +139,21 @@ if __name__=="__main__":
         val_loss = np.min(history["val_loss"])  # check validation loss
         t_loss = history["loss"][np.argmin(history["val_loss"])]  # training loss
         epochs = np.argmin(history["val_loss"])  # number of epochs used to train
-        
-        Xt_r = feature_rescaler(f)
+
+        Xt_r = feature_rescaler.feature_rescale(f)
         Yt_r = dd.normalize_labels(l, rescaler=1, log=True)
         # run predictions
         y = np.array(model(Xt_r))
         print("Running model:", filename)
         mse = np.mean((y[:, :, 0] - Yt_r)**2)
-        
+
         res.append([filename, epochs, t_loss, val_loss,mse])
     res = pd.DataFrame(res)
-    res.columns = ["Model", "training_epochs", "training_MSE", "validation_MSE", "test_MSE"] 
-    res.to_csv( os.path.join(output_wd, res_file + ".csv" ), 
+    res.columns = ["Model", "training_epochs", "training_MSE", "validation_MSE", "test_MSE"]
+    res.to_csv( os.path.join(output_wd, res_file + ".csv" ),
                 index=False)
     print("Output saved in:", os.path.join(output_wd, res_file + ".csv"))
 
     print("Plotting features")
     dd.plot_feature_hists(test_features=f, empirical_features=features, 
-        show=False, wd=output_wd, file_name=res_file+"_features")
+        show=False, wd=output_wd, output_name=res_file + "_features")
