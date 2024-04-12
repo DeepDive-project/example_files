@@ -120,7 +120,6 @@ def plot_all_models():
     return features
 
 if __name__=="__main__":
-    
     # Run predictions and create plots
     features = plot_all_models()
     
@@ -139,8 +138,10 @@ if __name__=="__main__":
         val_loss = np.min(history["val_loss"])  # check validation loss
         t_loss = history["loss"][np.argmin(history["val_loss"])]  # training loss
         epochs = np.argmin(history["val_loss"])  # number of epochs used to train
-
-        Xt_r = feature_rescaler.feature_rescale(f)
+        try:
+            Xt_r = feature_rescaler.feature_rescale(f)
+        except:
+            Xt_r = f * feature_rescaler
         Yt_r = dd.normalize_labels(l, rescaler=1, log=True)
         # run predictions
         y = np.array(model(Xt_r))
@@ -153,7 +154,8 @@ if __name__=="__main__":
     res.to_csv( os.path.join(output_wd, res_file + ".csv" ),
                 index=False)
     print("Output saved in:", os.path.join(output_wd, res_file + ".csv"))
-
+    
     print("Plotting features")
-    dd.plot_feature_hists(test_features=f, empirical_features=features, 
+    dd.plot_feature_hists(test_features=f, empirical_features=features,
         show=False, wd=output_wd, output_name=res_file + "_features")
+
