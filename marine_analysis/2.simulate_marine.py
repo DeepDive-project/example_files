@@ -20,10 +20,7 @@ try:
     os.mkdir('simulations/')
 except:
     pass
-try:
-    os.mkdir('simulations/sqs_')
-except:
-    pass
+
 output_path = "simulations/"
 
 use_bins = True
@@ -110,7 +107,7 @@ def run_sim(rep):
         sp_x = bd_sim.run_simulation(print_res=False)
 
         # using min_age and max_age ensures that the time bins always span the same amount of time
-        sim = fossil_sim.run_simulation(sp_x, min_age=0, max_age=root_age)
+        sim = fossil_sim.run_simulation(sp_x, min_age=0, max_age=root_age, return_sqs_data=False)
         sim_y = sim['global_true_trajectory']
         sim_features = dd.extract_sim_features(sim)
         batch_features.append(sim_features)
@@ -132,7 +129,7 @@ def run_test_sim(rep):
         if i % 1 == 0 and rep == 0:
             dd.print_update("%s of %s done" % (i+1, n_test_simulations))
         sp_x = bd_sim.run_simulation(print_res=False)
-        sim = fossil_sim.run_simulation(sp_x, min_age=0, max_age=root_age)
+        sim = fossil_sim.run_simulation(sp_x, min_age=0, max_age=root_age, return_sqs_data=False)
         sim_features = dd.extract_sim_features(sim)
         sim_y = sim['global_true_trajectory']
         batch_features.append(sim_features)
