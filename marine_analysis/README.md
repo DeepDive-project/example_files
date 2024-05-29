@@ -114,7 +114,7 @@ label_file = "marine_test_labels.npy"
 res_file = "marine_results" # name used to save the outputs. 
 ```
 
-The script is launched as shown insteps 2 and 3 and generates three output files: a PDF file with the estimated diversity trajectory for the empirical clade, a CSV table with the training, validation and test MSE for each model, and a PNG file with plots summarizing the simulated and empirical features.
+The script is launched as shown in steps 2 and 3 and generates three output files: a PDF file with the estimated diversity trajectory for the empirical clade, a CSV table with the training, validation and test MSE for each model, and a PNG file with plots summarizing the simulated and empirical features.
 
 
 
