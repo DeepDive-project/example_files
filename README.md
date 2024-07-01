@@ -4,4 +4,4 @@ We provide two worked examples showing how to setup and run a [DeepDive](https:/
 
 Instructions on how to install DeepDive are available [here](https://github.com/DeepDive-project/deepdive/blob/main/README.md#installing-deepdive-in-a-virtual-environment).
 
-For an example showing how to set up and run analyses with [DeepDiver](https://github.com/DeepDive-project/DeepDiveR) in R, see [carnivoran_analysis](https://github.com/DeepDive-project/example_files/tree/main/carnivoran_analysis). Instructions for installing DeepDiveR and package documentation can be found [here](https://github.com/DeepDive-project/DeepDiveR).
+For an example showing how to set up and run analyses with [DeepDiveR](https://github.com/DeepDive-project/DeepDiveR) in R, see [carnivoran_analysis](https://github.com/DeepDive-project/example_files/tree/main/carnivoran_analysis). Instructions for installing DeepDiveR and package documentation can be found [here](https://github.com/DeepDive-project/DeepDiveR).
