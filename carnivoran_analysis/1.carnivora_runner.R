@@ -6,28 +6,8 @@ library(data.table)
 
 
 # load an occurrence table here
-# your_dat <- read.csv("your_file_path")
-path_dat <- "C:/Users/CooperR/Documents/GitHub/carnivore_analysis"
+path_dat <- "your_path"  # path to folder containing cleaned data
 dat <- read_xlsx(paste0(path_dat, "/carnivora_data_cleaned.xlsx"), sheet="Records")
-
-dat <- dat[-which(dat$Maximum_Age =="Unknown"),]
-dat <- dat[-which(dat$Latitude == "New_Record"),]
-dat <- dat[-which(dat$Species == "Genus_Only"),]
-dat$Complete_name <- paste(dat$Genus,dat$Species)
-
-dat <- data.frame(dat$Complete_name, dat$Continent, 
-                  as.numeric(dat$Minimum_Age), as.numeric(dat$Maximum_Age), 
-                  dat$Latitude, dat$Longitude)
-colnames(dat) <- c('Taxon', 'Area', 'MinAge', 'MaxAge', 
-                   'Latitude', 'Longitude')
-
-# assign localities from coordinates
-dat$Latitude <- round(as.numeric(dat$Latitude), digits=1)
-dat$Longitude <- round(as.numeric(dat$Longitude), digits=1)
-setDT(dat)[, Locality := .GRP, by =.(Latitude, Longitude, MinAge, MaxAge)]
-
-dat <- dat[!duplicated(dat), ]  # remove duplicated rows
-
 
 # Specify a vector of time bins
 bins <- c(max(dat$MaxAge), 65, 64, 63, 61.6, 60, 59.2, 58.13333, 57.06667, 56, 
@@ -45,17 +25,6 @@ dd_dataset <- paste(path_dat, dd_input_file_name, sep="/")
 # Prepare input file for deepdive, set output_file name to save
 prep_dd_input(dat = dat, bins = bins, r = 100, 
               age_m = "random_by_loc", output_file = dd_dataset)
-
-# Check the number of extant taxa
-summary_dat <- read_xlsx(paste0(path_dat, "/carnivora_data_cleaned.xlsx"), sheet="Species summary")
-summary_dat <- summary_dat[-which(summary_dat$Minimum_age =="Unknown"),]
-summary_dat <- summary_dat[-which(summary_dat$Status == "Extinct"),]
-summary_dat$Complete_name <- paste(summary_dat$Genus,summary_dat$Species)
-summary_dat <- summary_dat[1:313,]  ## remove row with NA
-summary_dat <- data.frame(summary_dat$Complete_name, summary_dat$Status)
-colnames(summary_dat) <- c("Taxon", "Status")
-summary_dat <- summary_dat[!duplicated(summary_dat), ]
-length(summary_dat$Status == "Extant")
 
 
 # create a config for a full analysis
@@ -84,17 +53,8 @@ set_value(attribute_name="dd_K", value=c(31, 3100), module="simulations", config
 set_value(attribute_name = "pr_extant_clade", value=1, module="simulations", config)
 
 
-# From the data, find when areas must have been occupied by (MaxAge for oldest
-# fossil sampled per continent, in this case).
-area_tables <- split(dat, f = dat$Area)  # Split data by area
-Africa <- max(area_tables$Africa$MaxAge)
-Asia <- max(area_tables$Asia$MaxAge)
-Europe <- max(area_tables$Europe$MaxAge)
-N_America <- max(area_tables$NorthAmerica$MaxAge)
-S_America <- max(area_tables$SouthAmerica$MaxAge)
-
-# to have regions becoming available over time, create area_ages object
-# should be written in alphabetical order, give a label and sort them
+# To have regions becoming available over time, create area_ages object
+# should be written in alphabetical order
 area_ages <- rbind(c(61.6, 59.2),  # Africa 
                    c(max(bins), max(bins)),  # Asia
                    c(59.2, 56),  # Europe
