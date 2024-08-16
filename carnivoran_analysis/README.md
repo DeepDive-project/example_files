@@ -12,7 +12,7 @@ python run_dd_config.py your_path/config_file.ini
 
 You can additionally specify a working directory where all output files are saved and the number of CPUs used for the parallelized simulations, which will overwrite the corresponding settings in the configuration file, using the flags 
 ```
--wd your\_working\_directory} 
+-wd your\_working\_directory
 ```
 and e.g. -cpu 64. 
 
