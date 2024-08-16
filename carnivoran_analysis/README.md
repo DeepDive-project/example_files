@@ -1,6 +1,6 @@
 # carnivore_analysis
 
-You can find instructions of installing the DeepDive programme [here](https://github.com/DeepDive-project/deepdive) and the DeepDiveR library [here.](https://github.com/DeepDive-project/DeepDiveR)
+You can find instructions for installing the DeepDive programme [here](https://github.com/DeepDive-project/deepdive) and the DeepDiveR library [here.](https://github.com/DeepDive-project/DeepDiveR)
 
 Once the programme has been installed, the R script carnivora_runner.R takes input occurrence data from carnivora_data_cleaned.xlsx, defines time bins, present diversity of the clade and the number of replicates to produce formatted input data and a configuration file.
 
