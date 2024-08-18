@@ -2,7 +2,10 @@
 
 You can find instructions for installing the DeepDive programme [here](https://github.com/DeepDive-project/deepdive) and the DeepDiveR library [here.](https://github.com/DeepDive-project/DeepDiveR)
 
-Once the programme has been installed, the R script `carnivora_runner.R` takes input occurrence data from `carnivora_data_cleaned.xlsx`, defines time bins, present diversity of the clade and the number of replicates to produce formatted input data and a configuration file.
+Once the programme has been installed, the R script `carnivora_runner.R` takes input occurrence data from `Carnivora_data.csv`.
+The script then defines time bins to be used in the analysis and the present diversity of the clade, i.e. the number of living species in the clade. This will be used to inform the model.
+Additional settings can be specified such as the number of replicates (age randomizations), the number of simulations, and information about area connectivity.
+The output of this script is formatted input data and a config file.
 
 Once the configuration and input files are created, the full DeepDive analysis, inclusive of simulation, model training and empirical predictions, can be carried out through a single command line entered in a Terminal (MacOS and Linux) or Command prompt (Windows) window executing the Python script [`run_dd_config.py`](https://github.com/DeepDive-project/deepdive/run_dd_config.py) as follows:
 
