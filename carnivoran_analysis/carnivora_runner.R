@@ -1,12 +1,18 @@
 library(devtools)
+# Option 1: install the package from GitHub
+devtools::install_github("DeepDive-project/DeepDiveR")
+# Option 2: load it from a directory after donwloading it from
+# https://github.com/DeepDive-project/DeepDiveR
 deepdiver_path <- "path_to_DeepDiveR"
 setwd(deepdiver_path)
 load_all(".")
 library(DeepDiveR)
 
 
-# load an occurrence table here
-path_dat <- "your_path"  # path to the input data table (e.g. a CSV file)
+# Load an occurrence table here
+# This typically includes one row for each occurrence and 5 columns:
+# taxon name, geographic area, min age, max age, and locality
+path_dat <- "your_path"  # path to the input data 
 setwd(path_dat)
 dat <- read.csv("carnivora_data.csv")
 
@@ -23,11 +29,14 @@ bins <- c(max(dat$MaxAge), 65, 64, 63, 61.6, 60, 59.2, 58.13333, 57.06667, 56,
 dd_file_name <- "carnivora_deepdive_input.csv"
 
 # Prepare input file for deepdive, set output_file name to save
-prep_dd_input(dat = dat, bins = bins, r = 10, 
-              age_m = "random_by_loc", output_file = dd_file_name)
+# with the argument 'r=10' we are randomly resampling occurrence ages 
+# 10 times from their stratigraphic ranges
+prep_dd_input(dat = dat, bins = bins, r = 10, output_file = dd_file_name)
 
 
-# create a config for a full analysis
+# Create a config for the DeepDive analysis
+# If applicable you can specify the number of living taxa which will be used 
+# by the model to calibrate the predicted diversity trajectories
 config <- create_config(
       path_wd = path_dat,  
       bins = bins,
@@ -35,9 +44,7 @@ config <- create_config(
       n_areas = length(unique(dat$Area)),
       simulations_file = "simulations_carnivora", 
       models_file = "trained_models_carnivora", 
-      add_test = T, 
       present_diversity = 313,
-      autotune=TRUE,
       empirical_input_file = dd_file_name
 )
 
