@@ -60,9 +60,9 @@ area_ages <- rbind(c(max(bins), max(bins)),  # Africa
                    c(11.608, 7.3))           # South America 
 
 
-# Regions disappearing instead of connecting can be made via adding the argument
-# label = "end"
-areas_matrix(area_ages, n_areas = length(unique(dat$Area)), config)
+# Regions disappearing instead of connecting can be made via setting the label argument
+# to: label = "end"
+areas_matrix(area_ages, n_areas = length(unique(dat$Area)), config, label="start")
 
 # For the purpose of runnign a quick test analysis we use low number of training 
 # and test simulations 
