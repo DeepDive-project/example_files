@@ -4,6 +4,7 @@ devtools::install_github("DeepDive-project/DeepDiveR")
 # Option 2: load it from a directory after donwloading it from
 # https://github.com/DeepDive-project/DeepDiveR
 deepdiver_path <- "path_to_DeepDiveR"
+deepdiver_path <- "C:/Users/CooperR/Documents/GitHub/DeepDiveR-review"
 setwd(deepdiver_path)
 load_all(".")
 library(DeepDiveR)
@@ -12,9 +13,9 @@ library(DeepDiveR)
 # Load an occurrence table here
 # This typically includes one row for each occurrence and 5 columns:
 # taxon name, geographic area, min age, max age, and locality
-path_dat <- "your_path"  # path to the input data 
-setwd(path_dat)
-dat <- read.csv("carnivora_data.csv")
+# For now, we will use the carnivoran occurrences included in the package
+data(carnivora)
+dat <- carnivora
 
 # Specify a vector of time bins (they do not need to be equally spaced)
 bins <- c(max(dat$MaxAge), 65, 64, 63, 61.6, 60, 59.2, 58.13333, 57.06667, 56, 
@@ -29,23 +30,20 @@ bins <- c(max(dat$MaxAge), 65, 64, 63, 61.6, 60, 59.2, 58.13333, 57.06667, 56,
 dd_file_name <- "carnivora_deepdive_input.csv"
 
 # Prepare input file for deepdive, set output_file name to save
-# with the argument 'r=10' we are randomly resampling occurrence ages 
+# with the argument 'r=100' we are randomly resampling occurrence ages 
 # 10 times from their stratigraphic ranges
-prep_dd_input(dat = dat, bins = bins, r = 10, output_file = dd_file_name)
+prep_dd_input(dat = dat, bins = bins, r = 100, output_file = dd_file_name)
 
 
 # Create a config for the DeepDive analysis
 # If applicable you can specify the number of living taxa which will be used 
 # by the model to calibrate the predicted diversity trajectories
 config <- create_config(
-      path_wd = path_dat,  
       bins = bins,
-      sim_name="carnivora",
-      n_areas = length(unique(dat$Area)),
-      simulations_file = "simulations_carnivora", 
-      models_file = "trained_models_carnivora", 
+      name="carnivora",
+      n_regions = length(unique(dat$Region)),
       present_diversity = 313,
-      empirical_input_file = dd_file_name
+      data_file = dd_file_name
 )
 
 
@@ -53,27 +51,24 @@ config <- create_config(
 # Areas are expected to be in alphabetical order
 # Here for example we assume that dispersal to South America only becomes  
 # possible between 11 and 7 Ma
-area_ages <- rbind(c(max(bins), max(bins)),  # Africa 
-                   c(max(bins), max(bins)),  # Asia
-                   c(max(bins), max(bins)),  # Europe
-                   c(max(bins), max(bins)),  # North America
-                   c(11.608, 7.3))           # South America 
-
+region_ages <- rbind(c("Africa", max(bins), max(bins)),  
+                     c("Asia", max(bins), max(bins)),  
+                     c("Europe", max(bins), max(bins)), 
+                     c("North America", max(bins), max(bins)),  
+                     c("South America", 11.608, 7.3))            
+region_ages <- as.data.frame(region_ages)
+# Label columns
+colnames(region_ages) <- c("Region", "MaxAge", "MinAge")
 
 # Regions disappearing instead of connecting can be made via setting the label argument
 # to: label = "end"
-areas_matrix(area_ages, n_areas = length(unique(dat$Area)), config, label="start")
+regions_matrix(config, region_ages, presence = TRUE)
 
-# For the purpose of runnign a quick test analysis we use low number of training 
-# and test simulations 
-# Note that you will need at least 10,000 training simulations for a real analysis
-set_value(attribute_name = "n_training_simulations", 
-          value=100, 
-          module="simulations", config)
-
-set_value(attribute_name = "n_test_simulations", 
-        value=10, 
-        module="simulations", config)
+# add models 
+add_model(config=config, lstm_nodes = c(64, 32), dense_nodes = c(64, 32), model_name = "1")
+add_model(config=config, lstm_nodes = c(128, 64, 32), dense_nodes = c(64, 32), model_name = "2")
+add_model(config=config, lstm_nodes = c(256, 128, 64), dense_nodes = c(64, 32), model_name = "3")
+add_model(config=config, lstm_nodes = c(512, 128), dense_nodes = c(64, 32), model_name = "4")
 
 
 # write the configuration file
