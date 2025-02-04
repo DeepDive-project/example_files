@@ -4,7 +4,6 @@ devtools::install_github("DeepDive-project/DeepDiveR")
 # Option 2: load it from a directory after donwloading it from
 # https://github.com/DeepDive-project/DeepDiveR
 deepdiver_path <- "path_to_DeepDiveR"
-deepdiver_path <- "C:/Users/CooperR/Documents/GitHub/DeepDiveR-review"
 setwd(deepdiver_path)
 load_all(".")
 library(DeepDiveR)
