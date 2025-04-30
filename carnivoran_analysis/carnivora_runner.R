@@ -1,11 +1,12 @@
-library(devtools)
+library(remotes)
 # Option 1: install the package from GitHub
-devtools::install_github("DeepDive-project/DeepDiveR")
+remotes::install_github("DeepDive-project/DeepDiveR")
 # Option 2: load it from a directory after donwloading it from
 # https://github.com/DeepDive-project/DeepDiveR
-deepdiver_path <- "path_to_DeepDiveR"
-setwd(deepdiver_path)
-load_all(".")
+#library(devtools)
+#deepdiver_path <- "path_to_DeepDiveR"
+#setwd(deepdiver_path)
+#load_all(".")
 library(DeepDiveR)
 
 
@@ -38,11 +39,11 @@ prep_dd_input(dat = dat, bins = bins, r = 100, output_file = dd_file_name)
 # If applicable you can specify the number of living taxa which will be used 
 # by the model to calibrate the predicted diversity trajectories
 config <- create_config(
-      bins = bins,
       name="carnivora",
+      data_file = dd_file_name,
+      bins = bins,
       n_regions = length(unique(dat$Region)),
-      present_diversity = 313,
-      data_file = dd_file_name
+      present_diversity = 313
 )
 
 
@@ -63,8 +64,7 @@ colnames(region_ages) <- c("Region", "MaxAge", "MinAge")
 # to: label = "end"
 regions_matrix(config, region_ages, presence = TRUE)
 
-# add models 
-add_model(config=config, lstm_nodes = c(64, 32), dense_nodes = c(64, 32), model_name = "1")
+# add models beyond the default model in the config
 add_model(config=config, lstm_nodes = c(128, 64, 32), dense_nodes = c(64, 32), model_name = "2")
 add_model(config=config, lstm_nodes = c(256, 128, 64), dense_nodes = c(64, 32), model_name = "3")
 add_model(config=config, lstm_nodes = c(512, 128), dense_nodes = c(64, 32), model_name = "4")
